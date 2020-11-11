@@ -9,12 +9,12 @@ const router = express.Router();
 const products = [];
 
 router.get('/add-product', (req, res, next) => {
-    console.log('add product');
     res.render('add-product', 
     {pageTitle: 'Add Products', 
     path: '/admin/add-product',
     productCSS: true,
-    activeProduct: true})
+    activeProduct: true
+    });
 });
 
 router.post('/add-product',(req, res, next) => {
