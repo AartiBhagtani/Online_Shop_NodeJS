@@ -12,9 +12,15 @@ const adminData = require('./admin');
 router.get('/', shopController.getIndex);
 
 router.get('/products', shopController.getProducts);
-// router.get('products');
+
 router.get('/checkcout', shopController.getCheckout);
+
 router.get('/cart', shopController.getCart);
+
+router.post('/cart', shopController.postCart);
+
 router.get('/order', shopController.getOrder);
+
+router.get('/products/:productId', shopController.getProduct);
 
 module.exports = router;

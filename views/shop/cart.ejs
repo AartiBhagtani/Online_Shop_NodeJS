@@ -1,6 +1,18 @@
+
 <%- include('../includes/head.ejs') %>
 </head>
   <body>
     <%- include('../includes/navigation.ejs') %>    
-<%- include('../includes/end.ejs') %>
+      <main>
+        <% if (products.length > 0) { %>
+          <% products.forEach(p => { %>
+            <ul>
+              <li><%= p.productData %>(<% %>)<li>
+            </ul>
+          <% }) %>
+        <% } else { %>
+          <h1>No products in here</h1>
+        <% } %>
+      </main>
+    <%- include('../includes/end.ejs') %>
 

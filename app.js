@@ -14,6 +14,8 @@ app.set('views', 'views');
 
 const shopRoutes = require('./routes/shop')
 const adminRoutes = require('./routes/admin')
+const db = require('./util/database')
+
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
