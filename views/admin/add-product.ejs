@@ -5,7 +5,7 @@
 <body>
   <%- include('../includes/navigation.ejs') %>    
   <main>
-    <form class="product-form" action="/admin/add-product" method="POST">
+    <form class="product-form" action="/add-product" method="POST">
       <div class="form-control">
         <label for="title">Title</label>
         <input type="text" name="title" id="title">
@@ -13,10 +13,11 @@
       <div class="form-control">
         <label for="imageUrl">Image URL</label>
         <input type="text" name="imageUrl" id="imageUrl">
-      </div>
+      </div> 
       <div class="form-control">
         <label for="price">Price</label>
-        <input type="number" name="price" id="price" step="0.01">
+        <input type="number" name="price" 
+        ="price" step="0.01">
       </div>
       <div class="form-control">
         <label for="description">Description</label>
