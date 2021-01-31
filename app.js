@@ -6,6 +6,7 @@ const csrf = require('csurf');
 const path = require('path');
 const flash = require('connect-flash');
 const MongoDBStore = require('connect-mongodb-session')(session);
+require('dotenv').config()
 
 // const expressHbs = require('express-handlebars');
 
