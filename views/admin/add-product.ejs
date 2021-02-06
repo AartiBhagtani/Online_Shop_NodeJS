@@ -4,7 +4,11 @@
 </head>
 <body>
   <%- include('../includes/navigation.ejs') %>    
+  <% if(errorMessage) { %>
+      <div class="user-message user-message--error"><%= errorMessage%></div>
+  <% } %>
   <main>
+  
     <form class="product-form" action="/add-product" method="POST">
       <div class="form-control">
         <label for="title">Title</label>
