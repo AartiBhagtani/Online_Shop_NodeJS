@@ -6,10 +6,8 @@ const csrf = require('csurf');
 const path = require('path');
 const flash = require('connect-flash');
 const MongoDBStore = require('connect-mongodb-session')(session);
-require('dotenv').config()
 
 // const expressHbs = require('express-handlebars');
-
 
 const MONGODB_URI = 'mongodb+srv://aarti:GOMongo890@cluster0.k8mns.mongodb.net/shop?retryWrites=true&w=majority'
 
@@ -21,7 +19,7 @@ const store = new MongoDBStore({
 
 const csrfProtection = csrf();
 
-const productsController = require('./controllers/error.js')
+const errorController = require('./controllers/error.js')
 // app.engine('hbs', expressHbs({layoutsDir: 'views/layouts/', defaultLayout: 'main-layouts', extname: 'hbs'}));
 
 app.set('view engine', 'ejs');
@@ -42,28 +40,45 @@ app.use(csrfProtection);
 app.use(flash());
 
 app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
+
+app.use((req, res, next) => {
   if(!req.session.user) {
     return next();
   }
   User.findById(req.session.user._id)
   .then((user) => {
+    if(!user) {
+      return next();
+    }
     req.user = user
     next();
   })
-  .catch((err) => console.log(err));
-});
-
-app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.session.isLoggedIn;
-  res.locals.csrfToken = req.csrfToken();
-  next();
+  .catch((err) => {
+    next(new Error(err));
+    // throw new Error(err);
+  });
 });
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
 
-app.use(productsController.get404);
+app.get('/500', errorController.get500);
+
+app.use(errorController.get404);
+
+app.use((error, req, res, next) => {
+  // res.status(error.httpStatusCode).render(...)
+  res.status(500).render('500', {
+    pageTitle: 'Error',
+    path: '/500',
+    isAuthenticated: req.session.isLoggedIn
+  })
+})
 
 mongoose.connect(MONGODB_URI,{useUnifiedTopology: true, useNewUrlParser: true})
   .then(result => {
