@@ -107,6 +107,7 @@ app.use((error, req, res, next) => {
 
 mongoose.connect(MONGODB_URI,{useUnifiedTopology: true, useNewUrlParser: true})
   .then(result => {
+    // console.log(err)
     console.log('connected');
     // User.findOne().then(user => {
     //   if(!user) {
