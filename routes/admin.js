@@ -21,8 +21,6 @@ router.post('/add-product', isAuth,
       .isString()
       .isLength({min: 3})
       .trim(),
-    body('imageUrl', 'URL should be valid')
-      .isURL(), 
     body('price', 'Price should be in decimal')
       .isFloat(),
     body('description', 'Description should be atleast 5 characters')
@@ -41,8 +39,6 @@ router.post('/edit-product', isAuth,
       .isString()
       .isLength({min: 3})
       .trim(),
-    body('imageUrl', 'URL should be valid')
-      .isURL(), 
     body('price', 'Price should be in decimal')
       .isFloat(),
     body('description', 'Description should be atleast 5 characters')

@@ -3,23 +3,36 @@ const { validationResult } = require('express-validator');
 
 exports.postAddProduct = (req, res, next) => {
   const title = req.body.title;
-  const imageUrl = req.body.imageUrl;
+  const image = req.file;
   const price = req.body.price;
   const description = req.body.description;
+  if(!image) {
+    return res.status(422).render('admin/edit-product', {
+      pageTitle: 'Add Products', 
+      path: '/admin/add-product', 
+      editing: false,
+      hasError: true,
+      errorMessage: 'Attached file is not an image',
+      product: {title: title, price: price, description: description},
+      validationErrors: []
+    });
+  }
   const errors = validationResult(req);
-
+  
   if(!errors.isEmpty()) {
     console.log(errors.array());
     return res.status(422).render('admin/edit-product', {
       pageTitle: 'Add Products', 
-      path: '/admin/edit-product', 
+      path: '/admin/add-product', 
       editing: false,
       hasError: true,
       errorMessage: errors.array()[0].msg,
-      product: {title: title, imageUrl: imageUrl, price: price, description: description},
+      product: {title: title, price: price, description: description},
       validationErrors: errors.array()
     });
   }
+
+  const imageUrl = image.path;
   const product = new Product({title: title, price: price, description: description, imageUrl: imageUrl, userId: req.user._id})
   .save()
     .then(result => {
@@ -82,7 +95,7 @@ exports.getEditProduct = (req, res, next) => {
 exports.postEditProduct = (req, res, next) => {
   const productId = req.body.productId;
   const updatedTitle = req.body.title;
-  const updatedImageURL = req.body.imageUrl;
+  const updatedImage = req.file;
   const updatedPrice = req.body.price;  
   const updatedDescription = req.body.description;
 
@@ -111,9 +124,10 @@ exports.postEditProduct = (req, res, next) => {
     product.title = updatedTitle;
     product.price = updatedPrice;
     product.description = updatedDescription;
-    product.imageUrl = updatedImageURL;
-
-    console.log(product.title);
+    if(updatedImage){
+      product.imageUrl = updatedImage.path;
+    }
+    
     return product.save()
       .then(result => {
       console.log(result)
