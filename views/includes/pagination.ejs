@@ -1,0 +1,5 @@
+<section class="pagination">
+  <% for (let page = 1; page <= lastPage; page++) { %>
+    <a href="/?page=<%= page %>" class="<% if (currentPage == page) { %>active<% } %>"><%= page %></a>
+  <% } %>
+</section>
