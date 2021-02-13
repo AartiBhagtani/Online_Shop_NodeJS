@@ -22,11 +22,18 @@ router.post('/cart', isAuth, shopController.postCart);
 
 router.get('/products/:productId', isAuth, shopController.getProduct);
 
+router.get('/checkout', isAuth, shopController.getCheckout);
+
+router.get('/checkout/success', shopController.getCheckoutSuccess);
+
+router.get('/checkout/cancel', shopController.getCheckout);
+
 router.post('/cart-delete-item', isAuth, shopController.postCartDeleteProduct);
 
 router.get('/orders', isAuth, shopController.getOrder);
 
-router.post('/create-order', isAuth, shopController.postOrder);
+// not required
+// router.post('/create-order', isAuth, shopController.postOrder);
 
 router.get('/orders/:orderId', isAuth, shopController.getInvoice);
 
