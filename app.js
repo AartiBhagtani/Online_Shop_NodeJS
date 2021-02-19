@@ -8,6 +8,8 @@ const flash = require('connect-flash');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const multer = require('multer');
 
+require('dotenv').config();
+
 // const expressHbs = require('express-handlebars');
 
 const MONGODB_URI = 'mongodb+srv://aarti:GOMongo890@cluster0.k8mns.mongodb.net/shop?retryWrites=true&w=majority'

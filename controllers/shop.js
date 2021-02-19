@@ -8,7 +8,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const ITEMS_PER_PAGE = 2;
 
 exports.getProducts = (req, res, next) => {
-let totalItems;
+  let totalItems;
   const page = +req.query.page || 1;
   Product.find().countDocuments()
   .then(numProducts => {
