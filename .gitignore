@@ -2,3 +2,5 @@
 .vscode/
 node_modules/*
 .env
+server.cert
+server.key
