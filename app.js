@@ -4,15 +4,21 @@ const session = require('express-session');
 const mongoose = require('mongoose');
 const csrf = require('csurf');
 const path = require('path');
+const fs = require('fs');
+const https = require('https');
 const flash = require('connect-flash');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const multer = require('multer');
+var favicon = require('serve-favicon');
+const helmet = require('helmet')
+const compression = require('compression')
+const morgan = require('morgan');
 
 require('dotenv').config();
 
 // const expressHbs = require('express-handlebars');
 
-const MONGODB_URI = 'mongodb+srv://aarti:GOMongo890@cluster0.k8mns.mongodb.net/shop?retryWrites=true&w=majority'
+const MONGODB_URI = process.env.MONGODB_URI
 
 const app = express();
 const store = new MongoDBStore({
@@ -21,6 +27,9 @@ const store = new MongoDBStore({
 })
 
 const csrfProtection = csrf();
+
+const privateKey = fs.readFileSync('server.key');
+const certificate= fs.readFileSync('server.cert')
 
 const errorController = require('./controllers/error.js')
 // app.engine('hbs', expressHbs({layoutsDir: 'views/layouts/', defaultLayout: 'main-layouts', extname: 'hbs'}));
@@ -32,6 +41,15 @@ const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
 const User = require('./models/user');
+
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, 'access.log'), 
+  {flags: 'a'}
+)
+
+app.use(helmet());
+app.use(compression());
+app.use(morgan('combined', { stream: accessLogStream }))
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -108,6 +126,10 @@ app.use((error, req, res, next) => {
   })
 })
 
+app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
+
+console.log(process.env.NODE_ENV);
+
 mongoose.connect(MONGODB_URI,{useUnifiedTopology: true, useNewUrlParser: true})
   .then(result => {
     // console.log(err)
@@ -122,6 +144,8 @@ mongoose.connect(MONGODB_URI,{useUnifiedTopology: true, useNewUrlParser: true})
     //   user.save()
     //   }
     // })
-    app.listen(3000);
+    app.listen(process.env.PORT || 3000);
+    // https.createServer({key: privateKey, cert: certificate}, app)
+    // .listen(3000)
   })
   .catch(err => console.log(err));
