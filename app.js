@@ -28,8 +28,8 @@ const store = new MongoDBStore({
 
 const csrfProtection = csrf();
 
-const privateKey = fs.readFileSync('server.key');
-const certificate= fs.readFileSync('server.cert')
+// const privateKey = fs.readFileSync('server.key');
+// const certificate = fs.readFileSync('server.cert')
 
 const errorController = require('./controllers/error.js')
 // app.engine('hbs', expressHbs({layoutsDir: 'views/layouts/', defaultLayout: 'main-layouts', extname: 'hbs'}));
